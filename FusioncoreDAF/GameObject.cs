@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,16 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-=======
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
->>>>>>> master
 namespace FusioncoreDAF
 {
     class GameObject
@@ -43,14 +32,9 @@ namespace FusioncoreDAF
     abstract class MovingObject : GameObject
     {
         protected Vector2 speed;
-<<<<<<< HEAD
 
         public MovingObject(Texture2D texture, float X, float Y, float speedX, float speedY) :
         base(texture, X, Y)
-=======
-        public MovingObject(Texture2D texture, float X, float Y, float speedX, float speedY) :
-            base(texture, X, Y)
->>>>>>> master
         {
             this.speed.X = speedX;
             this.speed.Y = speedY;
@@ -61,7 +45,6 @@ namespace FusioncoreDAF
         protected bool isAlive = true;
 
         public PhysicalObject(Texture2D texture, float X, float Y, float speedX, float speedY)
-<<<<<<< HEAD
         : base(texture, X, Y, speedX, speedY)
         {
         }
@@ -72,18 +55,6 @@ namespace FusioncoreDAF
             Rectangle otherRect =
            new Rectangle(Convert.ToInt32(other.X), Convert.ToInt32(other.Y), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height));
             return myRect.Intersects(otherRect);
-=======
-            : base(texture, X, Y, speedX, speedY)
-        {
-        }
-
-        public bool CheckCollision(PhysicalObject other)
-        {
-            Rectangle myRect = new Rectangle(Convert.ToInt32(X), Convert.ToInt32(Y), Convert.ToInt32(Width), Convert.ToInt32(Height));
-            Rectangle otherRect = new Rectangle(Convert.ToInt32(other.X), Convert.ToInt32(other.Y), Convert.ToInt32(other.Width), Convert.ToInt32(other.Height));
-            return myRect.Intersects(otherRect);
-
->>>>>>> master
         }
         public bool IsAlive
         {
