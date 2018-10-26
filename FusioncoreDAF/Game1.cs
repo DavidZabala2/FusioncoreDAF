@@ -7,17 +7,22 @@ namespace FusioncoreDAF
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        HighScore highscore;
+        SpriteFont myFont;
+
+        enum State { PrintHighScore, EnterHighScore };
+        State currentState;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-        ///
+
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -28,7 +33,12 @@ namespace FusioncoreDAF
         {
             // TODO: Add your initialization logic here
 
+            GameElements.currentState = GameElements.State.Menu;
+            GameElements.Initialize();
+            highscore = new HighScore(10);
             base.Initialize();
+
+
         }
 
         /// <summary>
@@ -39,6 +49,9 @@ namespace FusioncoreDAF
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            myFont = Content.Load<SpriteFont>("myFont");
+            highscore.LoadFromFile("highscore.txt");
+            GameElements.LoadContent(Content, Window);
 
             // TODO: use this.Content to load your game content here
         }
@@ -49,6 +62,7 @@ namespace FusioncoreDAF
         /// </summary>
         protected override void UnloadContent()
         {
+            highscore.SaveToFile("highscore.txt");
             // TODO: Unload any non ContentManager content here
         }
 
@@ -59,10 +73,44 @@ namespace FusioncoreDAF
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
 
             // TODO: Add your update logic here
+
+            switch (GameElements.currentState)
+            {
+                case GameElements.State.Run:
+                    GameElements.currentState = GameElements.RunUpdate(Content, Window, gameTime);
+
+
+                    break;
+                case GameElements.State.HighScore:
+                    GameElements.currentState = GameElements.HighScoreUpdate();
+
+                    break;
+                case GameElements.State.Quit:
+                    this.Exit();
+                    break;
+                default:
+                    GameElements.currentState = GameElements.MenuUpdate(gameTime);
+                    break;
+
+            }
+            switch (currentState)
+            {
+                case State.EnterHighScore:
+                    if (highscore.EnterUpdate(gameTime, 10))
+                        currentState = State.PrintHighScore;
+                    break;
+                default:
+                    KeyboardState keyboardState = Keyboard.GetState();
+                    if (keyboardState.IsKeyDown(Keys.E))
+                        currentState = State.EnterHighScore;
+                    break;
+            }
+
+
 
             base.Update(gameTime);
         }
@@ -74,6 +122,39 @@ namespace FusioncoreDAF
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
+            switch (GameElements.currentState)
+            {
+                case GameElements.State.Run:
+                    GameElements.RunDraw(spriteBatch);
+
+                    break;
+
+                case GameElements.State.HighScore:
+                    GameElements.HighScoreDraw(spriteBatch);
+
+                    break;
+                case GameElements.State.Quit:
+                    this.Exit();
+                    break;
+                default:
+                    GameElements.MenuDraw(spriteBatch);
+                    break;
+            }
+            switch (currentState)
+            {
+                case State.EnterHighScore:
+                    highscore.EnterDraw(spriteBatch, myFont);
+                    break;
+                default:
+                    highscore.PrintDraw(spriteBatch, myFont);
+                    break;
+            }
+
+
+
+            spriteBatch.End();
+
 
             // TODO: Add your drawing code here
 
@@ -81,3 +162,4 @@ namespace FusioncoreDAF
         }
     }
 }
+
