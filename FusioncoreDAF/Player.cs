@@ -13,8 +13,8 @@ namespace FusioncoreDAF
 {
     class Player : PhysicalObject
     {
-        Texture2D bulletTexture;
-        List<Trail> trail;
+      
+        
         double timeSinceLastBullet = 0;
         int points = 0;
         public int Points { get { return points; } set { points = value; } }
