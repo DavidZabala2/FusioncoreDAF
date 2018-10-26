@@ -8,7 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace FusioncoreDAF
-{
+{ /// <summary>
+/// 
+/// </summary>
     class Player : PhysicalObject
     {
         int points = 0;
